@@ -11,41 +11,62 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f4f7fb;color:#172033}
-header{background:#142d4e;color:white;padding:20px 5%;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
-header h2{font-size:21px}
-header p{font-size:12px;color:#c5d5e8;margin-top:5px}
-button{border:0;padding:11px 17px;border-radius:7px;cursor:pointer;font-weight:600}
+body{font-family:Arial,Helvetica,sans-serif;background:#f2f4f8;color:#202b3c}
+header{background:#101b35;color:white;padding:21px 28px;display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}
+header h1{font-size:21px;letter-spacing:.4px}
+.header-right{display:flex;align-items:center;gap:12px}
+.refresh{font-size:12px;color:#d5deef}
+.container{max-width:1600px;margin:auto;padding:22px}
+.panel{background:#fff;border:1px solid #e5e9f0;border-radius:10px;padding:18px;margin-bottom:18px;box-shadow:0 2px 9px #172b4d0a}
+.filters{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr)) auto;gap:14px;align-items:end}
+label{display:block;font-size:12px;font-weight:700;margin-bottom:8px;color:#263449}
+input,select{width:100%;height:42px;padding:0 12px;border:1px solid #cfd6e1;border-radius:6px;background:#fff;color:#263449;font-size:13px}
+button{border:0;border-radius:6px;padding:11px 16px;font-weight:700;cursor:pointer;font-size:12px}
 button:disabled{opacity:.6;cursor:not-allowed}
-.primary{background:#1769aa;color:white}
-.secondary{background:#e8eef6;color:#24364b}
-.danger{background:#ffe8e8;color:#b42318}
-.container{max-width:1450px;margin:25px auto;padding:0 20px}
-.panel{background:white;padding:22px;border-radius:12px;box-shadow:0 3px 15px #152d4e0c;margin-bottom:20px}
-h3{margin-bottom:16px;color:#183653}
-.login-box{max-width:420px;margin:65px auto}
-input,select{padding:11px;border:1px solid #d5deea;border-radius:7px;width:100%;background:white;color:#172033}
-label{font-size:13px;font-weight:600;display:block;margin:12px 0 6px}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:15px}
-.stat{background:white;padding:20px;border-radius:11px;box-shadow:0 3px 12px #152d4e0c}
-.stat p{font-size:13px;color:#64748b}
-.stat h2{font-size:28px;margin-top:9px;color:#1769aa}
-.filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.primary{background:#172544;color:white}
+.primary:hover{background:#263b68}
+.light{background:#e9edf5;color:#24334c}
+.danger{background:#ffe9e9;color:#a52a2a}
+.upload-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:12px}
+.upload-row input{max-width:300px;height:auto;padding:7px}
+.stats-layout{display:grid;grid-template-columns:310px 1fr;gap:16px;margin-bottom:18px}
+.stat-card{background:#e8efff;border-radius:10px;display:flex;align-items:center;gap:22px;padding:20px 25px;min-height:130px}
+.stat-icon{width:75px;height:75px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:32px}
+.stat-info{text-align:center;flex:1}
+.stat-info p{font-size:12px;font-weight:700;color:#243d70}
+.stat-info h2{font-size:36px;margin-top:10px;color:#101b35}
+.table-panel{padding:0;overflow:hidden}
+.table-title{background:#1646c8;color:white;text-align:center;padding:12px;font-size:13px;font-weight:700}
 .table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:750px}
-th,td{text-align:left;padding:13px;border-bottom:1px solid #edf0f5;font-size:13px}
-th{background:#f3f6fa;color:#42536b}
-tr:hover{background:#f8fbff}
-.status{padding:5px 9px;border-radius:20px;background:#e4f5eb;color:#167443;font-size:11px}
-.muted{color:#718096;font-size:13px}
+table{border-collapse:collapse;width:100%;min-width:750px}
+th{background:#edf0f5;color:#27354b;font-size:12px;padding:12px;text-align:left;white-space:nowrap}
+td{font-size:12px;padding:13px 12px;border-bottom:1px solid #e8ebf0;color:#344158}
+tbody tr:hover{background:#f6f8fc}
+.empty{text-align:center;color:#7a8799;padding:25px}
+.pill{display:inline-block;background:#e6f5ed;color:#177347;padding:5px 9px;border-radius:20px;font-size:11px;font-weight:700}
+.muted{font-size:12px;color:#7b8798}
+.note{font-size:11px;color:#657187;margin-top:12px;line-height:1.5}
 .hidden{display:none!important}
-.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-.notice{padding:12px;border-radius:8px;background:#eef6ff;color:#24517c;font-size:13px;margin-top:12px;line-height:1.5}
+.message{font-size:12px;margin-top:10px;line-height:1.5}
 .error{color:#b42318}
-.success{color:#167443}
-#message,#loginMessage,#uploadMessage{margin-top:12px;font-size:13px;line-height:1.5}
-footer{text-align:center;color:#8995a5;padding:25px;font-size:12px}
-@media(max-width:600px){header{align-items:flex-start}.container{padding:0 12px}.panel{padding:15px}}
+.success{color:#16804b}
+.login-box{max-width:430px;margin:60px auto}
+.login-box h2{margin-bottom:10px}
+.login-box input{margin-bottom:12px}
+.login-box button{width:100%}
+.admin-tools{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+footer{text-align:center;padding:18px;color:#8b95a5;font-size:11px}
+@media(max-width:850px){
+ .filters{grid-template-columns:repeat(2,minmax(130px,1fr))}
+ .stats-layout{grid-template-columns:1fr}
+}
+@media(max-width:520px){
+ .container{padding:12px}
+ header{padding:18px}
+ header h1{font-size:16px}
+ .filters{grid-template-columns:1fr 1fr}
+ .stat-card{min-height:110px}
+}
 </style>
 </head>
 
@@ -53,430 +74,338 @@ footer{text-align:center;color:#8995a5;padding:25px;font-size:12px}
 
 <header>
   <div>
-    <h2>Shift Resource Availability</h2>
-    <p>Central Resource Management Dashboard</p>
+    <h1>SHIFT RESOURCE AVAILABILITY DASHBOARD</h1>
+    <div class="muted" style="color:#bdc9df;margin-top:6px">
+      Centralised Resource Management
+    </div>
   </div>
-  <div class="actions">
-    <span id="roleLabel" style="color:white;font-size:13px">Team Lead View</span>
-    <button id="loginButton" class="secondary" onclick="showLogin()">Admin Login</button>
-    <button id="logoutButton" class="danger hidden" onclick="logout()">Logout</button>
+  <div class="header-right">
+    <span class="refresh" id="refreshTime">◉ Connecting...</span>
+    <button class="light" id="loginButton" onclick="showLogin()">Admin Login</button>
+    <button class="danger hidden" id="logoutButton" onclick="logout()">Logout</button>
   </div>
 </header>
 
-<div class="container">
+<main class="container">
 
   <!-- ADMIN LOGIN -->
   <section id="loginSection" class="panel login-box hidden">
-    <h3>Administrator Login</h3>
+    <h2>Administrator Login</h2>
+    <p class="muted">Sign in to upload and publish the roster.</p>
 
-    <label>Email Address</label>
+    <label style="margin-top:20px">Email Address</label>
     <input type="email" id="adminEmail" placeholder="Enter admin email">
 
     <label>Password</label>
     <input type="password" id="adminPassword" placeholder="Enter password">
 
-    <br><br>
-    <button id="loginSubmit" class="primary" style="width:100%" onclick="login()">Login</button>
-
-    <p id="loginMessage"></p>
-
+    <button class="primary" id="loginSubmit" onclick="login()">LOGIN</button>
+    <p id="loginMessage" class="message"></p>
     <br>
-    <button class="secondary" style="width:100%" onclick="hideLogin()">Cancel</button>
+    <button class="light" onclick="hideLogin()">CANCEL</button>
   </section>
 
   <!-- ADMIN UPLOAD -->
-  <section id="uploadSection" class="panel hidden">
-    <h3>Upload Resource Excel</h3>
-    <p class="muted">Upload the latest resource workbook to publish the dashboard data.</p>
+  <section id="adminSection" class="panel hidden">
+    <div class="admin-tools">
+      <div>
+        <h3>Upload Excel Roster</h3>
+        <p class="muted">Administrator access only</p>
+      </div>
+      <button class="danger" onclick="logout()">Logout</button>
+    </div>
+    <br>
+    <div class="upload-row">
+      <strong>Load Excel roster:</strong>
+      <input type="file" id="excelFile" accept=".xlsx,.xls">
+      <button class="primary" id="uploadButton" onclick="uploadExcel()">UPLOAD ROSTER</button>
+    </div>
+    <p id="uploadMessage" class="message"></p>
+    <p class="note">The latest uploaded workbook replaces the previous published dashboard data.</p>
+  </section>
 
-    <label>Select Excel File</label>
-    <input type="file" id="excelFile" accept=".xlsx,.xls">
+  <!-- FILTERS -->
+  <section class="panel">
+    <div class="filters">
 
-    <br><br>
-    <button id="uploadButton" class="primary" onclick="uploadExcel()">Upload & Publish Data</button>
+      <div>
+        <label>Team</label>
+        <select id="teamFilter" onchange="renderDashboard()">
+          <option value="">All Teams</option>
+        </select>
+      </div>
 
-    <p id="uploadMessage"></p>
+      <div>
+        <label>Date</label>
+        <input type="date" id="dateFilter" onchange="renderDashboard()">
+      </div>
 
-    <div class="notice">
-      Publishing a new workbook replaces the previous dashboard snapshot.
-      Check the workbook before uploading.
+      <div>
+        <label>Time Zone</label>
+        <select id="timezoneFilter" onchange="renderDashboard()">
+          <option value="IST">IST</option>
+          <option value="EST">EST</option>
+          <option value="CST">CST</option>
+          <option value="PST">PST</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Shift Timing</label>
+        <select id="shiftFilter" onchange="renderDashboard()">
+          <option value="">All Shifts</option>
+        </select>
+      </div>
+
+      <button class="primary" onclick="clearFilters()">↻ Reset Filters</button>
+
     </div>
   </section>
 
-  <!-- DASHBOARD -->
-  <section id="dashboardSection">
+  <!-- RESOURCE COUNT AND TABLE -->
+  <div class="stats-layout">
 
-    <div class="grid" style="margin-bottom:20px">
-      <div class="stat">
-        <p>Total Resource Records</p>
-        <h2 id="totalResources">0</h2>
-      </div>
-      <div class="stat">
-        <p>Total Teams</p>
-        <h2 id="totalTeams">0</h2>
-      </div>
-      <div class="stat">
-        <p>Escalation Contacts</p>
-        <h2 id="totalEscalations">0</h2>
-      </div>
-      <div class="stat">
-        <p>Last Updated</p>
-        <h2 id="lastUpdated" style="font-size:15px">Not available</h2>
-      </div>
-    </div>
-
-    <section class="panel">
-      <h3>Resource Filters</h3>
-
-      <div class="filters">
-        <div>
-          <label>Search Resource</label>
-          <input id="searchFilter" placeholder="Name / Email / Contact" oninput="renderDashboard()">
-        </div>
-
-        <div>
-          <label>Team</label>
-          <select id="teamFilter" onchange="renderDashboard()">
-            <option value="">All Teams</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Date</label>
-          <input type="date" id="dateFilter" onchange="renderDashboard()">
-        </div>
-
-        <div>
-          <label>Timezone</label>
-          <select id="timezoneFilter" onchange="renderDashboard()">
-            <option value="">All Timezones</option>
-            <option value="IST">IST</option>
-            <option value="EST">EST</option>
-            <option value="CST">CST</option>
-            <option value="PST">PST</option>
-          </select>
-        </div>
-
-        <div>
-          <label>Shift</label>
-          <select id="shiftFilter" onchange="renderDashboard()">
-            <option value="">All Shifts</option>
-          </select>
-        </div>
-      </div>
-
-      <br>
-      <div class="actions">
-        <button class="secondary" onclick="clearFilters()">Clear Filters</button>
-        <span class="muted" id="resultCount">0 resources</span>
+    <section class="stat-card">
+      <div class="stat-icon">👥</div>
+      <div class="stat-info">
+        <p>AVAILABLE RESOURCES</p>
+        <h2 id="availableCount">0</h2>
       </div>
     </section>
 
-    <section class="panel">
-      <h3>Resource Availability Details</h3>
-
+    <section class="panel table-panel">
+      <div class="table-title">AVAILABLE RESOURCES</div>
       <div class="table-wrap">
         <table>
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Contact</th>
+              <th>Resource Name</th>
+              <th>Email ID</th>
+              <th>Contact No.</th>
               <th>Team</th>
-              <th>Date</th>
-              <th>Timezone</th>
-              <th>Shift</th>
-              <th>Availability</th>
+              <th>Shift Timing</th>
             </tr>
           </thead>
-
           <tbody id="resourceTable">
-            <tr><td colspan="8" class="muted">Loading dashboard...</td></tr>
+            <tr><td colspan="5" class="empty">Loading resources...</td></tr>
           </tbody>
         </table>
       </div>
     </section>
 
-    <section class="panel">
-      <h3>Escalation Contacts</h3>
+  </div>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Role</th>
-              <th>Team</th>
-              <th>Email</th>
-              <th>Contact</th>
-            </tr>
-          </thead>
-
-          <tbody id="escalationTable">
-            <tr><td colspan="5" class="muted">No escalation data available</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
+  <!-- ESCALATION CONTACTS -->
+  <section class="panel table-panel">
+    <div class="table-title">ESCALATION CONTACTS</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Escalation Level</th>
+            <th>Name</th>
+            <th>Role</th>
+            <th>Email ID</th>
+            <th>Contact No.</th>
+            <th>Team</th>
+          </tr>
+        </thead>
+        <tbody id="escalationTable">
+          <tr><td colspan="6" class="empty">Loading escalation contacts...</td></tr>
+        </tbody>
+      </table>
+    </div>
   </section>
-</div>
+
+  <p class="note">
+    Note: Shift timings are stored in IST and converted automatically according to the selected timezone and date. Daylight-saving changes are considered for EST, CST and PST.
+  </p>
+
+</main>
 
 <footer>
-  Shift Resource Availability Dashboard · Centralised Live Data
+  Shift Resource Availability Dashboard
 </footer>
 
 <script>
 
-// ========================================
+// =====================================================
 // 1. SUPABASE CONFIGURATION
-// ========================================
+// =====================================================
 
 const SUPABASE_URL = "https://zejnrghemnstyhqqfxmg.supabase.co";
-
 const SUPABASE_KEY = "sb_publishable_dPN0KNrrBoI3Fn63ujBUtw_NGKykH3B";
-
 const ADMIN_USER_ID = "f3e8185d-c0ec-460e-af22-ffaae4362e0c";
 
-const db = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_KEY
-);
+const db = window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
+let currentUser = null;
 let resources = [];
 let escalations = [];
-let currentUser = null;
-let lastUpdatedValue = null;
-let refreshTimer = null;
+let lastUpdated = null;
 
 
-// ========================================
-// 2. BASIC HELPERS
-// ========================================
+// =====================================================
+// 2. TIMEZONE AND SHIFT CONFIGURATION
+// =====================================================
+
+// These are the three original IST shifts.
+// Times are in 24-hour format.
+
+const IST_SHIFTS = [
+  {id:"SHIFT_1",label:"07:00 AM - 04:00 PM",start:"07:00",end:"16:00"},
+  {id:"SHIFT_2",label:"03:00 PM - 12:00 AM",start:"15:00",end:"00:00"},
+  {id:"SHIFT_3",label:"11:00 PM - 08:00 AM",start:"23:00",end:"08:00"}
+];
+
+const TIMEZONES = {
+  IST:"Asia/Kolkata",
+  EST:"America/New_York",
+  CST:"America/Chicago",
+  PST:"America/Los_Angeles"
+};
 
 function escapeHTML(value){
-  return String(value ?? "").replace(/[&<>"']/g, char => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#39;"
-  })[char]);
+  return String(value ?? "").replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  })[c]);
 }
 
 function normalise(value){
-  return String(value ?? "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g,"");
+  return String(value ?? "").toLowerCase().replace(/[^a-z0-9]/g,"");
 }
 
-function findColumn(headers, aliases){
-  return headers.findIndex(header =>
-    aliases.includes(normalise(header))
-  );
+function dateParts(dateString){
+  const [year,month,day] = dateString.split("-").map(Number);
+  return {year,month,day};
 }
 
-function getCell(row,index){
-  return index >= 0 ? row[index] ?? "" : "";
+function addDays(dateString,days){
+  const d = new Date(dateString+"T12:00:00Z");
+  d.setUTCDate(d.getUTCDate()+days);
+  return d.toISOString().slice(0,10);
 }
 
+// Convert a wall-clock time in IST to the selected timezone.
+// The selected date is used so daylight saving is calculated correctly.
 
-// ========================================
-// 3. LOGIN AND LOGOUT
-// ========================================
+function convertISTTime(dateString,timeString,targetTimezone){
 
-function showLogin(){
-  document.getElementById("loginSection").classList.remove("hidden");
+  const {year,month,day} = dateParts(dateString);
+  const [hour,minute] = timeString.split(":").map(Number);
+
+  // IST is UTC + 05:30
+  const utcMilliseconds =
+    Date.UTC(year,month-1,day,hour,minute) - (330*60000);
+
+  const formatter = new Intl.DateTimeFormat("en-GB",{
+    timeZone:targetTimezone,
+    hour:"2-digit",
+    minute:"2-digit",
+    hour12:true
+  });
+
+  return formatter.format(new Date(utcMilliseconds));
 }
 
-function hideLogin(){
-  document.getElementById("loginSection").classList.add("hidden");
-}
+function getConvertedShift(shiftId,dateString,timezoneCode){
 
-function updateLoginUI(){
+  const shift = IST_SHIFTS.find(s=>s.id===shiftId);
+  if(!shift) return "";
 
-  const isAdmin =
-    currentUser && currentUser.id === ADMIN_USER_ID;
+  const timezone = TIMEZONES[timezoneCode] || TIMEZONES.IST;
 
-  document.getElementById("uploadSection")
-    .classList.toggle("hidden",!isAdmin);
+  let endDate = dateString;
 
-  document.getElementById("loginButton")
-    .classList.toggle("hidden",!!isAdmin);
-
-  document.getElementById("logoutButton")
-    .classList.toggle("hidden",!isAdmin);
-
-  document.getElementById("roleLabel").textContent =
-    isAdmin ? "Administrator" : "Team Lead View";
-}
-
-async function login(){
-
-  const email =
-    document.getElementById("adminEmail").value.trim();
-
-  const password =
-    document.getElementById("adminPassword").value;
-
-  const message =
-    document.getElementById("loginMessage");
-
-  const button =
-    document.getElementById("loginSubmit");
-
-  if(!email || !password){
-    message.textContent = "Enter email and password.";
-    message.className = "error";
-    return;
+  // For shifts ending after midnight, use the next day.
+  if(shift.end <= shift.start){
+    endDate = addDays(dateString,1);
   }
 
-  button.disabled = true;
-  message.textContent = "Signing in...";
+  const start = convertISTTime(dateString,shift.start,timezone);
+  const end = convertISTTime(endDate,shift.end,timezone);
 
-  try{
-
-    const {data,error} = await db.auth.signInWithPassword({
-      email,
-      password
-    });
-
-    if(error) throw error;
-
-    if(data.user.id !== ADMIN_USER_ID){
-      await db.auth.signOut();
-      throw new Error("This account is not authorised as administrator.");
-    }
-
-    currentUser = data.user;
-    updateLoginUI();
-    hideLogin();
-
-    message.textContent = "";
-
-  }catch(error){
-
-    message.textContent = error.message;
-    message.className = "error";
-
-  }finally{
-
-    button.disabled = false;
-
-  }
+  return start+" - "+end;
 }
 
-async function logout(){
+function getShiftId(value){
 
-  const {error} = await db.auth.signOut();
+  const text = normalise(value);
 
-  if(error){
-    alert(error.message);
-    return;
-  }
+  if(
+    text.includes("0700") ||
+    text.includes("7am") ||
+    text.includes("shift1") ||
+    text.includes("morning")
+  ) return "SHIFT_1";
 
-  currentUser = null;
-  updateLoginUI();
+  if(
+    text.includes("1500") ||
+    text.includes("3pm") ||
+    text.includes("shift2") ||
+    text.includes("afternoon")
+  ) return "SHIFT_2";
+
+  if(
+    text.includes("2300") ||
+    text.includes("11pm") ||
+    text.includes("shift3") ||
+    text.includes("night")
+  ) return "SHIFT_3";
+
+  return "";
 }
 
 
-// Restore existing login session
-async function restoreSession(){
-
-  const {data,error} = await db.auth.getSession();
-
-  if(error){
-    console.error(error);
-    return;
-  }
-
-  const user = data.session?.user || null;
-
-  if(user && user.id === ADMIN_USER_ID){
-    currentUser = user;
-  }else{
-    currentUser = null;
-  }
-
-  updateLoginUI();
-}
-
-db.auth.onAuthStateChange((_event,session)=>{
-
-  const user = session?.user || null;
-
-  currentUser =
-    user && user.id === ADMIN_USER_ID ? user : null;
-
-  updateLoginUI();
-
-});
-
-
-// ========================================
-// 4. EXCEL DATE HELPERS
-// ========================================
+// =====================================================
+// 3. DATE PARSER
+// =====================================================
 
 function excelDate(value){
 
   if(value instanceof Date && !isNaN(value)){
-    const year = value.getFullYear();
-    const month = String(value.getMonth()+1).padStart(2,"0");
-    const day = String(value.getDate()).padStart(2,"0");
-
-    return `${year}-${month}-${day}`;
+    return [
+      value.getFullYear(),
+      String(value.getMonth()+1).padStart(2,"0"),
+      String(value.getDate()).padStart(2,"0")
+    ].join("-");
   }
 
-  if(typeof value === "number"){
-
-    const parsed = XLSX.SSF.parse_date_code(value);
-
-    if(parsed){
-      return `${parsed.y}-${String(parsed.m).padStart(2,"0")}-${String(parsed.d).padStart(2,"0")}`;
+  if(typeof value==="number"){
+    const p = XLSX.SSF.parse_date_code(value);
+    if(p){
+      return `${p.y}-${String(p.m).padStart(2,"0")}-${String(p.d).padStart(2,"0")}`;
     }
   }
 
   const text = String(value ?? "").trim();
 
-  if(/^\d{4}-\d{2}-\d{2}$/.test(text)){
-    return text;
-  }
+  if(/^\d{4}-\d{2}-\d{2}$/.test(text)) return text;
 
   const match = text.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{2,4})$/);
 
   if(match){
-
-    const day = match[1].padStart(2,"0");
-    const month = match[2].padStart(2,"0");
-
     let year = match[3];
+    if(year.length===2) year="20"+year;
 
-    if(year.length === 2){
-      year = "20" + year;
-    }
-
-    return `${year}-${month}-${day}`;
+    return `${year}-${match[2].padStart(2,"0")}-${match[1].padStart(2,"0")}`;
   }
 
   return "";
 }
 
-function getTimezone(value){
 
-  const text = String(value ?? "").trim().toUpperCase();
+// =====================================================
+// 4. EXCEL COLUMN DETECTION
+// =====================================================
 
-  if(text.includes("IST")) return "IST";
-  if(text.includes("EST")) return "EST";
-  if(text.includes("CST")) return "CST";
-  if(text.includes("PST")) return "PST";
-
-  return text;
+function findColumn(headers,aliases){
+  return headers.findIndex(h=>aliases.includes(normalise(h)));
 }
 
-
-// ========================================
-// 5. EXCEL WORKBOOK PARSER
-// ========================================
+function getCell(row,index){
+  return index>=0 ? row[index] ?? "" : "";
+}
 
 function parseWorkbook(workbook){
 
@@ -485,21 +414,18 @@ function parseWorkbook(workbook){
 
   workbook.SheetNames.forEach(sheetName=>{
 
-    const sheet = workbook.Sheets[sheetName];
+    const rows = XLSX.utils.sheet_to_json(
+      workbook.Sheets[sheetName],
+      {header:1,defval:"",raw:true,blankrows:false}
+    );
 
-    const rows = XLSX.utils.sheet_to_json(sheet,{
-      header:1,
-      defval:"",
-      raw:true,
-      blankrows:false
-    });
-
-    if(rows.length < 2) return;
+    if(rows.length<2) return;
 
     const headers = rows[0];
+    const sheetNameNormal = normalise(sheetName);
 
     const isEscalation =
-      normalise(sheetName).includes("escalation");
+      sheetNameNormal.includes("escalation");
 
     const nameIndex = findColumn(headers,[
       "name","resourcename","employeename","fullname"
@@ -510,8 +436,7 @@ function parseWorkbook(workbook){
     ]);
 
     const contactIndex = findColumn(headers,[
-      "contact","contactno","phonenumber",
-      "mobileno","mobile","phone"
+      "contact","contactno","phonenumber","mobileno","mobile","phone"
     ]);
 
     const teamIndex = findColumn(headers,[
@@ -522,51 +447,53 @@ function parseWorkbook(workbook){
       "role","designation","position"
     ]);
 
-    const timezoneIndex = findColumn(headers,[
-      "timezone","timezonecode","region"
+    const levelIndex = findColumn(headers,[
+      "escalationlevel","level","escalation"
     ]);
 
     const shiftIndex = findColumn(headers,[
       "shift","shifttiming","workshift"
     ]);
 
+    const timezoneIndex = findColumn(headers,[
+      "timezone","region"
+    ]);
+
+    const dateIndex = findColumn(headers,[
+      "date","rosterdate","availabilitydate"
+    ]);
+
+    const availabilityIndex = findColumn(headers,[
+      "availability","status","availabilitystatus"
+    ]);
+
     const dateColumns = [];
 
     headers.forEach((heading,index)=>{
-
-      const date = excelDate(heading);
-
-      if(date){
-        dateColumns.push({
-          index,
-          date
-        });
-      }
-
+      const parsed = excelDate(heading);
+      if(parsed) dateColumns.push({index,date:parsed});
     });
 
     rows.slice(1).forEach(row=>{
 
-      if(row.every(value=>String(value).trim()==="")){
-        return;
-      }
+      if(row.every(v=>String(v).trim()==="")) return;
 
       const name = getCell(row,nameIndex);
       const email = getCell(row,emailIndex);
       const contact = getCell(row,contactIndex);
-      const team = getCell(row,teamIndex);
-      const role = getCell(row,roleIndex);
+      const team = String(getCell(row,teamIndex) || sheetName).trim();
 
       if(isEscalation){
 
         if(name || email || contact){
 
           parsedEscalations.push({
+            level:String(getCell(row,levelIndex) || ""),
             name:String(name),
-            role:String(role),
-            team:String(team),
+            role:String(getCell(row,roleIndex) || ""),
             email:String(email),
-            contact:String(contact)
+            contact:String(contact),
+            team:team
           });
 
         }
@@ -574,32 +501,33 @@ function parseWorkbook(workbook){
         return;
       }
 
+      if(!name && !email && !contact) return;
+
+      const rawShift = getCell(row,shiftIndex);
+      const shiftId = getShiftId(rawShift);
+
       const base = {
         name:String(name),
         email:String(email),
         contact:String(contact),
-        team:String(team || sheetName),
-        timezone:getTimezone(getCell(row,timezoneIndex)),
-        shift:String(getCell(row,shiftIndex))
+        team:team,
+        shiftId:shiftId,
+        originalShift:String(rawShift),
+        timezone:String(getCell(row,timezoneIndex) || "IST")
       };
-
-      if(!base.name && !base.email && !base.contact){
-        return;
-      }
 
       if(dateColumns.length){
 
         dateColumns.forEach(({index,date})=>{
 
-          const availability =
-            String(getCell(row,index)).trim();
+          const availability = String(getCell(row,index)).trim();
 
           if(availability){
 
             parsedResources.push({
               ...base,
-              date,
-              availability
+              date:date,
+              availability:availability
             });
 
           }
@@ -608,10 +536,15 @@ function parseWorkbook(workbook){
 
       }else{
 
+        const rowDate = excelDate(getCell(row,dateIndex));
+        const availability = availabilityIndex>=0
+          ? String(getCell(row,availabilityIndex))
+          : "Available";
+
         parsedResources.push({
           ...base,
-          date:"",
-          availability:"Not specified"
+          date:rowDate,
+          availability:availability
         });
 
       }
@@ -627,66 +560,177 @@ function parseWorkbook(workbook){
 }
 
 
-// ========================================
-// 6. UPLOAD AND PUBLISH EXCEL
-// ========================================
+// =====================================================
+// 5. LOGIN
+// =====================================================
+
+function showLogin(){
+  document.getElementById("loginSection").classList.remove("hidden");
+}
+
+function hideLogin(){
+  document.getElementById("loginSection").classList.add("hidden");
+}
+
+function updateLoginUI(){
+
+  const isAdmin =
+    currentUser && currentUser.id===ADMIN_USER_ID;
+
+  document.getElementById("adminSection")
+    .classList.toggle("hidden",!isAdmin);
+
+  document.getElementById("loginButton")
+    .classList.toggle("hidden",!!isAdmin);
+
+  document.getElementById("logoutButton")
+    .classList.toggle("hidden",!isAdmin);
+}
+
+async function login(){
+
+  const email = document.getElementById("adminEmail").value.trim();
+  const password = document.getElementById("adminPassword").value;
+  const message = document.getElementById("loginMessage");
+  const button = document.getElementById("loginSubmit");
+
+  if(!email || !password){
+    message.textContent="Please enter email and password.";
+    message.className="message error";
+    return;
+  }
+
+  button.disabled=true;
+  message.textContent="Signing in...";
+
+  try{
+
+    const {data,error} = await db.auth.signInWithPassword({
+      email,password
+    });
+
+    if(error) throw error;
+
+    if(data.user.id!==ADMIN_USER_ID){
+      await db.auth.signOut();
+      throw new Error("This account is not authorised as administrator.");
+    }
+
+    currentUser=data.user;
+    updateLoginUI();
+    hideLogin();
+    message.textContent="";
+
+  }catch(error){
+
+    message.textContent=error.message;
+    message.className="message error";
+
+  }finally{
+    button.disabled=false;
+  }
+}
+
+async function logout(){
+
+  const {error}=await db.auth.signOut();
+
+  if(error){
+    alert(error.message);
+    return;
+  }
+
+  currentUser=null;
+  updateLoginUI();
+}
+
+async function restoreSession(){
+
+  const {data,error}=await db.auth.getSession();
+
+  if(error){
+    console.error(error);
+    return;
+  }
+
+  const user=data.session?.user || null;
+
+  currentUser =
+    user && user.id===ADMIN_USER_ID ? user : null;
+
+  if(user && user.id!==ADMIN_USER_ID){
+    await db.auth.signOut();
+  }
+
+  updateLoginUI();
+}
+
+db.auth.onAuthStateChange((_event,session)=>{
+
+  const user=session?.user || null;
+
+  currentUser =
+    user && user.id===ADMIN_USER_ID ? user : null;
+
+  updateLoginUI();
+});
+
+
+// =====================================================
+// 6. ADMIN EXCEL UPLOAD
+// =====================================================
 
 async function uploadExcel(){
 
-  if(!currentUser || currentUser.id !== ADMIN_USER_ID){
+  if(!currentUser || currentUser.id!==ADMIN_USER_ID){
     alert("Administrator login required.");
     return;
   }
 
-  const file =
-    document.getElementById("excelFile").files[0];
-
-  const message =
-    document.getElementById("uploadMessage");
-
-  const button =
-    document.getElementById("uploadButton");
+  const file=document.getElementById("excelFile").files[0];
+  const message=document.getElementById("uploadMessage");
+  const button=document.getElementById("uploadButton");
 
   if(!file){
-    message.textContent = "Please select an Excel file.";
-    message.className = "error";
+    message.textContent="Please select an Excel file.";
+    message.className="message error";
     return;
   }
 
-  button.disabled = true;
-  message.textContent = "Reading Excel workbook...";
-  message.className = "";
+  button.disabled=true;
+  message.textContent="Reading Excel workbook...";
+  message.className="message";
 
   try{
 
-    const buffer = await file.arrayBuffer();
+    const buffer=await file.arrayBuffer();
 
-    const workbook = XLSX.read(buffer,{
+    const workbook=XLSX.read(buffer,{
       type:"array",
       cellDates:true
     });
 
-    const result = parseWorkbook(workbook);
+    const result=parseWorkbook(workbook);
 
     if(
-      result.resources.length === 0 &&
-      result.escalations.length === 0
+      result.resources.length===0 &&
+      result.escalations.length===0
     ){
       throw new Error(
-        "No records found. Please check the Excel column headings and sheet names."
+        "No records found. Please check the Excel headings and sheet names."
       );
     }
 
-    const payload = {
+    const payload={
       resources:result.resources,
       escalations:result.escalations,
       fileName:file.name,
       updatedAt:new Date().toISOString()
     };
 
-    message.textContent = "Publishing dashboard data...";
+    message.textContent="Publishing roster...";
 
-    const {error} = await db
+    const {error}=await db
       .from("dashboard_snapshot")
       .upsert({
         id:1,
@@ -696,44 +740,36 @@ async function uploadExcel(){
 
     if(error) throw error;
 
-    message.textContent =
-      "Successfully published! " +
-      result.resources.length +
-      " resource records and " +
-      result.escalations.length +
-      " escalation contacts.";
+    message.textContent=
+      `Successfully published ${result.resources.length} resource records and ${result.escalations.length} escalation contacts.`;
 
-    message.className = "success";
+    message.className="message success";
 
     await loadDashboard();
 
   }catch(error){
 
-    console.error("Excel upload error:",error);
-
-    message.textContent = "Upload failed: " + error.message;
-    message.className = "error";
+    console.error(error);
+    message.textContent="Upload failed: "+error.message;
+    message.className="message error";
 
   }finally{
 
-    button.disabled = false;
+    button.disabled=false;
 
   }
 }
 
 
-// ========================================
-// 7. LOAD DATA FROM SUPABASE
-// ========================================
+// =====================================================
+// 7. LOAD SUPABASE DATA
+// =====================================================
 
 async function loadDashboard(){
 
-  const table =
-    document.getElementById("resourceTable");
-
   try{
 
-    const {data,error} = await db
+    const {data,error}=await db
       .from("dashboard_snapshot")
       .select("payload,updated_at")
       .eq("id",1)
@@ -743,203 +779,213 @@ async function loadDashboard(){
 
     if(!data){
 
-      resources = [];
-      escalations = [];
-      lastUpdatedValue = null;
-
+      resources=[];
+      escalations=[];
+      lastUpdated=null;
       renderDashboard();
-
-      table.innerHTML =
-        '<tr><td colspan="8" class="muted">No published data yet. Please wait for the administrator to upload the Excel file.</td></tr>';
 
       return;
     }
 
-    resources =
-      Array.isArray(data.payload?.resources)
-      ? data.payload.resources
-      : [];
+    resources=Array.isArray(data.payload?.resources)
+      ? data.payload.resources : [];
 
-    escalations =
-      Array.isArray(data.payload?.escalations)
-      ? data.payload.escalations
-      : [];
+    escalations=Array.isArray(data.payload?.escalations)
+      ? data.payload.escalations : [];
 
-    lastUpdatedValue =
-      data.updated_at || data.payload?.updatedAt || null;
+    lastUpdated=data.updated_at || data.payload?.updatedAt || null;
 
     renderDashboard();
 
+    document.getElementById("refreshTime").textContent=
+      "◉ Last Refreshed: "+new Date().toLocaleTimeString();
+
   }catch(error){
 
-    console.error("Dashboard load error:",error);
+    console.error("Supabase error:",error);
 
-    table.innerHTML =
-      `<tr><td colspan="8" class="error">${escapeHTML(error.message)}</td></tr>`;
+    document.getElementById("resourceTable").innerHTML=
+      `<tr><td colspan="5" class="empty">${escapeHTML(error.message)}</td></tr>`;
 
+    document.getElementById("refreshTime").textContent="Connection error";
   }
 }
 
 
-// ========================================
-// 8. DROPDOWN FILTERS
-// ========================================
+// =====================================================
+// 8. FILTER DROPDOWNS
+// =====================================================
 
 function fillDropdown(id,values,defaultText){
 
-  const select = document.getElementById(id);
-  const current = select.value;
+  const select=document.getElementById(id);
+  const current=select.value;
 
-  const uniqueValues = [...new Set(
-    values
-      .filter(value=>value !== null && value !== undefined && String(value).trim() !== "")
-      .map(value=>String(value))
+  const unique=[...new Set(
+    values.filter(v=>v!==null && v!==undefined && String(v).trim()!=="")
+      .map(v=>String(v).trim())
   )].sort();
 
-  select.innerHTML = "";
+  select.innerHTML="";
 
-  const defaultOption = document.createElement("option");
-  defaultOption.value = "";
-  defaultOption.textContent = defaultText;
-  select.appendChild(defaultOption);
+  const first=document.createElement("option");
+  first.value="";
+  first.textContent=defaultText;
+  select.appendChild(first);
 
-  uniqueValues.forEach(value=>{
-
-    const option = document.createElement("option");
-    option.value = value;
-    option.textContent = value;
-
+  unique.forEach(value=>{
+    const option=document.createElement("option");
+    option.value=value;
+    option.textContent=value;
     select.appendChild(option);
-
   });
 
-  select.value =
-    uniqueValues.includes(current) ? current : "";
+  select.value=unique.includes(current)?current:"";
 }
 
-
-// ========================================
-// 9. RENDER DASHBOARD
-// ========================================
-
-function renderDashboard(){
+function populateFilters(){
 
   fillDropdown(
     "teamFilter",
-    resources.map(resource=>resource.team),
+    [
+      ...resources.map(r=>r.team),
+      ...escalations.map(e=>e.team)
+    ],
     "All Teams"
   );
 
-  fillDropdown(
-    "shiftFilter",
-    resources.map(resource=>resource.shift),
-    "All Shifts"
-  );
+  const shiftSelect=document.getElementById("shiftFilter");
+  const current=shiftSelect.value;
 
-  const search =
-    document.getElementById("searchFilter").value.toLowerCase();
+  shiftSelect.innerHTML='<option value="">All Shifts</option>';
 
-  const team =
-    document.getElementById("teamFilter").value;
-
-  const date =
-    document.getElementById("dateFilter").value;
-
-  const timezone =
-    document.getElementById("timezoneFilter").value;
-
-  const shift =
-    document.getElementById("shiftFilter").value;
-
-  const filtered = resources.filter(resource=>{
-
-    const searchText = [
-      resource.name,
-      resource.email,
-      resource.contact,
-      resource.team
-    ].join(" ").toLowerCase();
-
-    return (
-      (!search || searchText.includes(search)) &&
-      (!team || resource.team === team) &&
-      (!date || resource.date === date) &&
-      (!timezone || resource.timezone === timezone) &&
-      (!shift || resource.shift === shift)
-    );
-
+  IST_SHIFTS.forEach(shift=>{
+    const option=document.createElement("option");
+    option.value=shift.id;
+    option.textContent=shift.label;
+    shiftSelect.appendChild(option);
   });
 
-  // Statistics
+  shiftSelect.value=current;
+}
 
-  document.getElementById("totalResources").textContent =
-    resources.length;
 
-  document.getElementById("totalTeams").textContent =
-    new Set(
-      resources.map(resource=>resource.team).filter(Boolean)
-    ).size;
+// =====================================================
+// 9. AVAILABLE RESOURCE CHECK
+// =====================================================
 
-  document.getElementById("totalEscalations").textContent =
-    escalations.length;
+function isAvailable(value){
 
-  document.getElementById("lastUpdated").textContent =
-    lastUpdatedValue
-      ? new Date(lastUpdatedValue).toLocaleString()
-      : "Not available";
+  const text=normalise(value);
 
-  document.getElementById("resultCount").textContent =
-    filtered.length + " resource records";
+  const unavailableWords=[
+    "unavailable","notavailable","leave","absent",
+    "booked","busy","no","notfree"
+  ];
+
+  if(unavailableWords.some(word=>text.includes(word))){
+    return false;
+  }
+
+  // Treat a blank availability cell as not available.
+  if(!text) return false;
+
+  return (
+    text.includes("available") ||
+    text==="yes" ||
+    text==="y" ||
+    text==="free" ||
+    text==="standby"
+  );
+}
+
+
+// =====================================================
+// 10. RENDER DASHBOARD
+// =====================================================
+
+function renderDashboard(){
+
+  populateFilters();
+
+  const team=document.getElementById("teamFilter").value;
+  const date=document.getElementById("dateFilter").value;
+  const timezone=document.getElementById("timezoneFilter").value;
+  const selectedShift=document.getElementById("shiftFilter").value;
+
+  const selectedResources=resources.filter(r=>{
+
+    const teamMatch=!team || r.team===team;
+    const dateMatch=!r.date || !date || r.date===date;
+
+    const available=isAvailable(r.availability);
+
+    const shiftMatch=!selectedShift || r.shiftId===selectedShift;
+
+    return teamMatch && dateMatch && available && shiftMatch;
+  });
 
   // Resource table
+  const resourceTable=document.getElementById("resourceTable");
 
-  const resourceTable =
-    document.getElementById("resourceTable");
+  if(selectedResources.length===0){
 
-  if(filtered.length === 0){
-
-    resourceTable.innerHTML =
-      '<tr><td colspan="8" class="muted">No matching resources found.</td></tr>';
+    resourceTable.innerHTML=
+      '<tr><td colspan="5" class="empty">No resources available for the selected filters</td></tr>';
 
   }else{
 
-    resourceTable.innerHTML = filtered.map(resource=>`
+    resourceTable.innerHTML=selectedResources.map(r=>{
 
-      <tr>
-        <td><strong>${escapeHTML(resource.name)}</strong></td>
-        <td>${escapeHTML(resource.email)}</td>
-        <td>${escapeHTML(resource.contact)}</td>
-        <td>${escapeHTML(resource.team)}</td>
-        <td>${escapeHTML(resource.date)}</td>
-        <td>${escapeHTML(resource.timezone)}</td>
-        <td>${escapeHTML(resource.shift)}</td>
-        <td><span class="status">${escapeHTML(resource.availability)}</span></td>
-      </tr>
+      const shiftText=r.shiftId
+        ? getConvertedShift(
+            r.shiftId,
+            date || new Date().toISOString().slice(0,10),
+            timezone
+          )
+        : r.originalShift || "Not specified";
 
-    `).join("");
+      return `
+        <tr>
+          <td><strong>${escapeHTML(r.name)}</strong></td>
+          <td>${escapeHTML(r.email)}</td>
+          <td>${escapeHTML(r.contact)}</td>
+          <td>${escapeHTML(r.team)}</td>
+          <td><span class="pill">${escapeHTML(shiftText)}</span></td>
+        </tr>
+      `;
+
+    }).join("");
 
   }
 
-  // Escalation table
+  // Available resource count
+  document.getElementById("availableCount").textContent=
+    selectedResources.length;
 
-  const escalationTable =
-    document.getElementById("escalationTable");
+  // Escalation contacts follow the selected team filter.
+  const selectedEscalations=escalations.filter(e=>
+    !team || e.team===team
+  );
 
-  if(escalations.length === 0){
+  const escalationTable=document.getElementById("escalationTable");
 
-    escalationTable.innerHTML =
-      '<tr><td colspan="5" class="muted">No escalation contacts found.</td></tr>';
+  if(selectedEscalations.length===0){
+
+    escalationTable.innerHTML=
+      '<tr><td colspan="6" class="empty">No escalation contacts available for the selected team</td></tr>';
 
   }else{
 
-    escalationTable.innerHTML = escalations.map(contact=>`
+    escalationTable.innerHTML=selectedEscalations.map(e=>`
 
       <tr>
-        <td><strong>${escapeHTML(contact.name)}</strong></td>
-        <td>${escapeHTML(contact.role)}</td>
-        <td>${escapeHTML(contact.team)}</td>
-        <td>${escapeHTML(contact.email)}</td>
-        <td>${escapeHTML(contact.contact)}</td>
+        <td>${escapeHTML(e.level)}</td>
+        <td><strong>${escapeHTML(e.name)}</strong></td>
+        <td>${escapeHTML(e.role)}</td>
+        <td>${escapeHTML(e.email)}</td>
+        <td>${escapeHTML(e.contact)}</td>
+        <td><strong>${escapeHTML(e.team)}</strong></td>
       </tr>
 
     `).join("");
@@ -949,42 +995,42 @@ function renderDashboard(){
 }
 
 
-// ========================================
-// 10. CLEAR FILTERS
-// ========================================
+// =====================================================
+// 11. RESET FILTERS
+// =====================================================
 
 function clearFilters(){
 
-  document.getElementById("searchFilter").value = "";
-  document.getElementById("teamFilter").value = "";
-  document.getElementById("dateFilter").value = "";
-  document.getElementById("timezoneFilter").value = "";
-  document.getElementById("shiftFilter").value = "";
+  document.getElementById("teamFilter").value="";
+  document.getElementById("dateFilter").value=
+    new Date().toISOString().slice(0,10);
+
+  document.getElementById("timezoneFilter").value="IST";
+  document.getElementById("shiftFilter").value="";
 
   renderDashboard();
 }
 
 
-// ========================================
-// 11. AUTO REFRESH
-// ========================================
+// =====================================================
+// 12. START APPLICATION
+// =====================================================
 
-async function initialiseDashboard(){
+async function initialise(){
+
+  // Default date
+  document.getElementById("dateFilter").value=
+    new Date().toISOString().slice(0,10);
 
   await restoreSession();
   await loadDashboard();
 
-  if(refreshTimer){
-    clearInterval(refreshTimer);
-  }
-
-  refreshTimer = setInterval(()=>{
-    loadDashboard();
-  },30000);
+  // Refresh dashboard every 30 seconds
+  setInterval(loadDashboard,30000);
 
 }
 
-initialiseDashboard();
+initialise();
 
 </script>
 </body>
