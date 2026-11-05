@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shift Resource Availability Dashboard</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<style>
+:root{--navy:#142d4e;--blue:#1769aa;--blue2:#eaf3fc;--ink:#172033;--muted:#718096;--line:#e6edf5;--bg:#f3f6fb;--white:#fff;--green:#167443;--shadow:0 8px 24px rgba(20,45,78,.06)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:14px}
+header{background:linear-gradient(115deg,#102746,#1b416b);color:#fff;padding:19px max(5%,calc((100% - 1380px)/2));display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;box-shadow:0 4px 18px #142d4e20}
+.brand{display:flex;align-items:center;gap:13px}.brand-mark{height:42px;width:42px;border-radius:12px;background:#ffffff18;display:grid;place-items:center;font-size:21px}
+header h2{font-size:20px;letter-spacing:.1px}header p{font-size:12px;color:#c8d8e9;margin-top:5px}
+.header-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.role-pill{font-size:12px;color:#eaf4ff;background:#ffffff18;border:1px solid #ffffff25;padding:8px 12px;border-radius:30px}
+button{border:0;padding:10px 15px;border-radius:8px;cursor:pointer;font-weight:650;font-size:13px;transition:.18s}
+button:hover{transform:translateY(-1px)}button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+.primary{background:var(--blue);color:#fff}.primary:hover{background:#105b96}
+.secondary{background:#edf2f8;color:#263c55}.secondary:hover{background:#e0e9f3}
+.danger{background:#ffe9e8;color:#a52c27}
+.container{max-width:1420px;margin:27px auto;padding:0 22px}
+.panel,.stat{background:var(--white);border:1px solid #eaf0f6;border-radius:13px;box-shadow:var(--shadow)}
+.panel{padding:22px;margin-bottom:19px}
+h3{font-size:16px;color:#183653;margin-bottom:16px}
+.panel-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.panel-heading h3{margin:0}
+.section-kicker{font-size:10px;text-transform:uppercase;letter-spacing:1px;font-weight:750;color:#7c91a9;margin-bottom:6px}
+.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:15px;margin-bottom:19px}
+.stat{padding:18px 20px;position:relative;overflow:hidden}
+.stat:after{content:"";position:absolute;width:66px;height:66px;border-radius:50%;background:#edf5fd;right:-18px;top:-20px}
+.stat p{font-size:12px;color:#64748b;font-weight:600;position:relative;z-index:1}
+.stat h2{font-size:27px;margin-top:10px;color:var(--blue);position:relative;z-index:1}
+.stat.updated h2{font-size:13px;line-height:1.5;color:#304a65}
+.filters{display:grid;grid-template-columns:repeat(5,minmax(140px,1fr));gap:13px}
+label{font-size:12px;font-weight:700;color:#41536a;display:block;margin:0 0 7px}
+input,select{padding:11px 12px;border:1px solid #d8e1ec;border-radius:8px;width:100%;background:#fff;color:#172033;font-size:13px;outline:none;min-height:40px}
+input:focus,select:focus{border-color:#6da7d8;box-shadow:0 0 0 3px #1769aa13}
+input[type=file]{padding:9px}
+.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.muted{color:var(--muted);font-size:12px}.hidden{display:none!important}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:9px}
+table{width:100%;border-collapse:collapse;min-width:820px}
+th,td{text-align:left;padding:13px 14px;border-bottom:1px solid #edf1f6;font-size:12px;white-space:nowrap}
+th{background:#f5f8fc;color:#52647b;font-size:11px;text-transform:uppercase;letter-spacing:.35px}
+tbody tr:last-child td{border-bottom:0}tbody tr:hover{background:#f8fbff}
+.status{display:inline-block;padding:5px 9px;border-radius:20px;background:#e5f5ec;color:#167443;font-size:11px;font-weight:650}
+.login-box{max-width:430px;margin:55px auto}
+.notice{padding:13px 14px;border-radius:9px;background:#eef6ff;color:#24517c;font-size:12px;margin-top:13px;line-height:1.6}
+.error{color:#b42318}.success{color:#167443}
+#message,#loginMessage,#uploadMessage{margin-top:12px;font-size:13px;line-height:1.5}
+.helper-line{display:flex;gap:8px;align-items:flex-start;background:#f7faff;border:1px solid #e8f0f8;border-radius:9px;padding:11px 13px;margin-top:14px;color:#58708a;font-size:12px;line-height:1.5}
+.helper-line strong{color:#294c70}
+.filter-footer{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-top:15px}
+.shift-guide{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:15px}
+.shift-card{border:1px solid #e6edf5;border-radius:9px;padding:12px;background:#fbfdff}
+.shift-card span{font-size:10px;color:#7890a8;font-weight:750;text-transform:uppercase;letter-spacing:.6px}
+.shift-card strong{display:block;font-size:13px;color:#1c4268;margin-top:6px}
+footer{text-align:center;color:#8995a5;padding:22px;font-size:11px}
+@media(max-width:950px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.filters{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){header{padding:16px 14px}.container{padding:0 12px;margin:17px auto}.panel{padding:15px}.grid{gap:10px}.stat{padding:15px}.stat h2{font-size:23px}.filters{grid-template-columns:1fr}.shift-guide{grid-template-columns:1fr}.brand-mark{display:none}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">
+    <div class="brand-mark">◈</div>
+    <div><h2>Shift Resource Availability</h2><p>Central Resource Management Dashboard</p></div>
+  </div>
+  <div class="header-actions">
+    <span id="roleLabel" class="role-pill">Lead Member · View Only</span>
+    <button id="loginButton" class="secondary" onclick="showLogin()">Admin Login</button>
+    <button id="logoutButton" class="danger hidden" onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<main class="container">
+  <section id="loginSection" class="panel login-box hidden">
+    <div class="section-kicker">Secure access</div><h3>Administrator Login</h3>
+    <label for="adminEmail">Email Address</label><input type="email" id="adminEmail" placeholder="Enter admin email" autocomplete="username">
+    <label for="adminPassword" style="margin-top:14px">Password</label><input type="password" id="adminPassword" placeholder="Enter password" autocomplete="current-password">
+    <br><br><button id="loginSubmit" class="primary" style="width:100%" onclick="login()">Login</button>
+    <p id="loginMessage"></p><br><button class="secondary" style="width:100%" onclick="hideLogin()">Cancel</button>
+  </section>
+
+  <section id="uploadSection" class="panel hidden">
+    <div class="panel-heading"><div><div class="section-kicker">Administrator workspace</div><h3>Upload Resource Excel</h3></div></div>
+    <p class="muted">Publish the latest workbook so every lead member sees the same updated dashboard.</p>
+    <label for="excelFile" style="margin-top:15px">Select Excel File</label><input type="file" id="excelFile" accept=".xlsx,.xls">
+    <br><br><button id="uploadButton" class="primary" onclick="uploadExcel()">Upload &amp; Publish Data</button>
+    <p id="uploadMessage"></p>
+    <div class="notice">A new workbook replaces the previous dashboard snapshot. Lead members can view the published information but cannot upload or change it.</div>
+  </section>
+
+  <section id="dashboardSection">
+    <div class="grid">
+      <div class="stat"><p>Total Resource Records</p><h2 id="totalResources">0</h2></div>
+      <div class="stat"><p>Total Teams</p><h2 id="totalTeams">0</h2></div>
+      <div class="stat"><p>Escalation Contacts</p><h2 id="totalEscalations">0</h2></div>
+      <div class="stat updated"><p>Last Updated</p><h2 id="lastUpdated">Not available</h2></div>
+    </div>
+
+    <section class="panel">
+      <div class="panel-heading"><div><div class="section-kicker">Find resources</div><h3>Resource Filters</h3></div><span class="muted">Filters apply to resource and escalation details</span></div>
+      <div class="filters">
+        <div><label for="searchFilter">Search Resource</label><input id="searchFilter" placeholder="Name / Email / Contact" oninput="renderDashboard()"></div>
+        <div><label for="teamFilter">Team</label><select id="teamFilter" onchange="onTeamChange()"><option value="">All Teams</option></select></div>
+        <div><label for="dateFilter">Date</label><input type="date" id="dateFilter" onchange="renderDashboard()"></div>
+        <div><label for="timezoneFilter">Timezone</label><select id="timezoneFilter" onchange="onTimezoneChange()"><option value="IST">IST</option><option value="EST">EST</option><option value="CST">CST</option><option value="PST">PST</option></select></div>
+        <div><label for="shiftFilter">Shift Timing</label><select id="shiftFilter" onchange="renderDashboard()"><option value="">All Shifts</option></select></div>
+      </div>
+      <div class="filter-footer"><div class="actions"><button class="secondary" onclick="clearFilters()">Clear Filters</button><span class="muted" id="resultCount">0 resources</span></div><span class="muted" id="dataStatus">Connecting to shared dashboard...</span></div>
+      <div class="helper-line"><span>ⓘ</span><span><strong>Shift conversion:</strong> The three shift schedules are stored as IST base timings. Select IST, EST, CST or PST to convert the displayed shift times. EST/CST/PST use standard-time offsets.</span></div>
+      <div class="shift-guide" id="shiftGuide"></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading"><div><div class="section-kicker">Live published workbook</div><h3>Resource Availability Details</h3></div><span class="muted">Shared view · Refreshes every 30 seconds</span></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Name</th><th>Email</th><th>Contact</th><th>Team</th><th>Date</th><th>Timezone</th><th>Shift Timing</th><th>Availability</th></tr></thead>
+        <tbody id="resourceTable"><tr><td colspan="8" class="muted">Loading dashboard...</td></tr></tbody>
+      </table></div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-heading"><div><div class="section-kicker">Team escalation directory</div><h3>Escalation Contacts</h3></div><span class="muted" id="escalationScope">All teams</span></div>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Name</th><th>Role</th><th>Team</th><th>Email</th><th>Contact</th></tr></thead>
+        <tbody id="escalationTable"><tr><td colspan="5" class="muted">No escalation data available</td></tr></tbody>
+      </table></div>
+    </section>
+  </section>
+</main>
+<footer>Shift Resource Availability Dashboard · Centralised Shared Data</footer>
+
+<script>
+/* SUPABASE CONFIGURATION */
+const SUPABASE_URL = "https://zejnrghemnstyhqqfxmg.supabase.co";
+const SUPABASE_KEY = "sb_publishable_dPN0KNrrBoI3Fn63ujBUtw_NGKykH3B";
+const ADMIN_USER_ID = "f3e8185d-c0ec-460e-af22-ffaae4362e0c";
+const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let resources=[], escalations=[], currentUser=null, lastUpdatedValue=null, refreshTimer=null;
+
+/* Three fixed shift schedules, stored as IST minutes after midnight. */
+const SHIFT_DEFINITIONS = [
+  {key:"shift1",name:"Shift 1",start:7*60,end:16*60},
+  {key:"shift2",name:"Shift 2",start:15*60,end:24*60},
+  {key:"shift3",name:"Shift 3",start:23*60,end:32*60}
+];
+/* Fixed standard-time offsets. IST is UTC+05:30. */
+const TIMEZONE_OFFSETS = {IST:330,EST:-300,CST:-360,PST:-480};
+
+function escapeHTML(value){
+  return String(value??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+function normalise(value){return String(value??"").toLowerCase().replace(/[^a-z0-9]/g,"");}
+function findColumn(headers,aliases){return headers.findIndex(h=>aliases.includes(normalise(h)));}
+function getCell(row,index){return index>=0?row[index]??"":"";}
+function showLogin(){document.getElementById("loginSection").classList.remove("hidden");}
+function hideLogin(){document.getElementById("loginSection").classList.add("hidden");}
+
+function updateLoginUI(){
+  const isAdmin=!!currentUser&&currentUser.id===ADMIN_USER_ID;
+  document.getElementById("uploadSection").classList.toggle("hidden",!isAdmin);
+  document.getElementById("loginButton").classList.toggle("hidden",isAdmin);
+  document.getElementById("logoutButton").classList.toggle("hidden",!isAdmin);
+  document.getElementById("roleLabel").textContent=isAdmin?"Administrator · Full Access":"Lead Member · View Only";
+}
+async function login(){
+  const email=document.getElementById("adminEmail").value.trim();
+  const password=document.getElementById("adminPassword").value;
+  const message=document.getElementById("loginMessage"),button=document.getElementById("loginSubmit");
+  if(!email||!password){message.textContent="Enter email and password.";message.className="error";return;}
+  button.disabled=true;message.textContent="Signing in...";message.className="";
+  try{
+    const {data,error}=await db.auth.signInWithPassword({email,password});
+    if(error)throw error;
+    if(data.user.id!==ADMIN_USER_ID){await db.auth.signOut();throw new Error("This account is not authorised as administrator.");}
+    currentUser=data.user;updateLoginUI();hideLogin();message.textContent="";
+  }catch(error){message.textContent=error.message;message.className="error";}
+  finally{button.disabled=false;}
+}
+async function logout(){
+  const {error}=await db.auth.signOut();
+  if(error){alert(error.message);return;}
+  currentUser=null;updateLoginUI();
+}
+async function restoreSession(){
+  const {data,error}=await db.auth.getSession();
+  if(error){console.error(error);return;}
+  const user=data.session?.user||null;
+  currentUser=(user&&user.id===ADMIN_USER_ID)?user:null;
+  if(user&&!currentUser)await db.auth.signOut();
+  updateLoginUI();
+}
+db.auth.onAuthStateChange((_event,session)=>{
+  const user=session?.user||null;
+  currentUser=(user&&user.id===ADMIN_USER_ID)?user:null;
+  updateLoginUI();
+});
+
+/* DATE, TIME AND EXCEL HELPERS */
+function excelDate(value){
+  if(value instanceof Date&&!isNaN(value))return `${value.getFullYear()}-${String(value.getMonth()+1).padStart(2,"0")}-${String(value.getDate()).padStart(2,"0")}`;
+  if(typeof value==="number"){
+    const p=XLSX.SSF.parse_date_code(value);
+    if(p)return `${p.y}-${String(p.m).padStart(2,"0")}-${String(p.d).padStart(2,"0")}`;
+  }
+  const text=String(value??"").trim();
+  if(/^\d{4}-\d{2}-\d{2}$/.test(text))return text;
+  const m=text.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{2,4})$/);
+  if(m){let y=m[3];if(y.length===2)y="20"+y;return `${y}-${m[2].padStart(2,"0")}-${m[1].padStart(2,"0")}`;}
+  return "";
+}
+function getTimezone(value){
+  const text=String(value??"").trim().toUpperCase();
+  for(const z of ["IST","EST","CST","PST"])if(text.includes(z))return z;
+  return text;
+}
+function pad2(n){return String(n).padStart(2,"0");}
+function formatClock(totalMinutes){
+  const dayOffset=Math.floor(totalMinutes/1440);
+  const mins=((totalMinutes%1440)+1440)%1440;
+  const hour24=Math.floor(mins/60),minute=mins%60;
+  const suffix=hour24>=12?"PM":"AM";
+  const hour12=hour24%12||12;
+  let day="";
+  if(dayOffset<0)day=" (previous day)";
+  if(dayOffset>0)day=" (next day)";
+  return `${pad2(hour12)}:${pad2(minute)} ${suffix}${day}`;
+}
+function convertShift(shift,timezone){
+  const offset=TIMEZONE_OFFSETS[timezone]??TIMEZONE_OFFSETS.IST;
+  const delta=offset-TIMEZONE_OFFSETS.IST;
+  return `${formatClock(shift.start+delta)} – ${formatClock(shift.end+delta)}`;
+}
+function parseClockToken(hour,minute,ampm){
+  let h=Number(hour),m=Number(minute||0);
+  if(h===12)h=0;
+  if(String(ampm).toUpperCase()==="PM")h+=12;
+  return h*60+m;
+}
+function identifyShift(value){
+  const text=String(value??"").trim().toLowerCase();
+  if(!text)return "";
+  const named=text.match(/shift\s*([123])/i);
+  if(named)return "shift"+named[1];
+  const matches=[...text.matchAll(/(\d{1,2})(?::(\d{2}))?\s*(am|pm)/gi)];
+  if(matches.length>=2){
+    const start=parseClockToken(matches[0][1],matches[0][2],matches[0][3]);
+    const end=parseClockToken(matches[1][1],matches[1][2],matches[1][3]);
+    const found=SHIFT_DEFINITIONS.find(s=>s.start===start&&((s.end%1440)===end));
+    if(found)return found.key;
+  }
+  const compact=normalise(text);
+  if(compact.includes("0700am0400pm")||compact.includes("7am4pm"))return "shift1";
+  if(compact.includes("0300pm1200am")||compact.includes("3pm12am"))return "shift2";
+  if(compact.includes("1100pm0800am")||compact.includes("11pm8am"))return "shift3";
+  return "";
+}
+function getShiftByKey(key){return SHIFT_DEFINITIONS.find(s=>s.key===key);}
+function displayShift(value,timezone){
+  const key=identifyShift(value),definition=getShiftByKey(key);
+  return definition?convertShift(definition,timezone):String(value??"");
+}
+
+/* EXCEL WORKBOOK PARSER — supports Contact Name / Name / POC headers */
+function findHeaderRow(rows, isEscalationSheet){
+  const aliases = [
+    "name","resourcename","employeename","fullname","escalationname",
+    "contactname","contactnames","escalationcontactname","contactperson",
+    "contactpersonname","personname","nameofcontact","pointofcontact","poc",
+    "email","emailid","mailid","officialemail","team","teamname",
+    "role","designation","position","contact","contactno","phonenumber",
+    "mobileno","mobile","phone","shift","shifttiming","workshift"
+  ];
+  let bestIndex=0, bestScore=-1;
+  const scanCount=Math.min(rows.length,12);
+  for(let r=0;r<scanCount;r++){
+    const values=(rows[r]||[]).map(normalise);
+    const score=values.reduce((total,value)=>total+(aliases.includes(value)?1:0),0);
+    if(score>bestScore){bestScore=score;bestIndex=r;}
+    if(score>=3 && (!isEscalationSheet || values.some(v=>["contactname","contactnames","escalationcontactname","contactperson","contactpersonname","name","fullname","personname","nameofcontact","pointofcontact","poc"].includes(v)))){
+      bestIndex=r; break;
+    }
+  }
+  return bestIndex;
+}
+function findColumn(headers,aliases){
+  const normalized=headers.map(normalise);
+  let index=normalized.findIndex(h=>aliases.includes(h));
+  if(index>=0)return index;
+  // Also accept headers such as "Primary Contact Name" or "Escalation Contact Name".
+  const nameAliases=["contactname","contactnames","escalationcontactname","contactpersonname","nameofcontact","pointofcontact","poc"];
+  if(aliases.some(a=>nameAliases.includes(a))){
+    index=normalized.findIndex(h=>nameAliases.some(a=>h.includes(a)) || h==="name");
+  }
+  return index;
+}
+function parseWorkbook(workbook){
+  const parsedResources=[],parsedEscalations=[];
+  workbook.SheetNames.forEach(sheetName=>{
+    const rows=XLSX.utils.sheet_to_json(workbook.Sheets[sheetName],{header:1,defval:"",raw:true,blankrows:false});
+    if(rows.length<2)return;
+    const sheetIsEscalation=normalise(sheetName).includes("escalation");
+    const headerRowIndex=findHeaderRow(rows,sheetIsEscalation);
+    const headers=rows[headerRowIndex]||[];
+    const headerNames=headers.map(normalise);
+    const nameAliases=["name","resourcename","employeename","fullname","escalationname","contactname","contactnames","escalationcontactname","contactperson","contactpersonname","personname","nameofcontact","pointofcontact","poc"];
+    const ni=findColumn(headers,nameAliases);
+    const ei=findColumn(headers,["email","emailid","mailid","officialemail","contactemail"]);
+    const ci=findColumn(headers,["contact","contactno","phonenumber","mobileno","mobile","phone","contactnumber","mobilenumber"]);
+    const ti=findColumn(headers,["team","teamname","project","projectname"]);
+    const ri=findColumn(headers,["role","designation","position"]);
+    const zi=findColumn(headers,["timezone","timezonecode","region"]);
+    const si=findColumn(headers,["shift","shifttiming","workshift"]);
+    const hasEscalationHeaders=(ri>=0 && ti>=0 && (ei>=0||ci>=0));
+    const isEscalation=sheetIsEscalation||hasEscalationHeaders;
+    const dateColumns=[];
+    headers.forEach((heading,index)=>{const date=excelDate(heading);if(date)dateColumns.push({index,date});});
+    rows.slice(headerRowIndex+1).forEach(row=>{
+      if(row.every(v=>String(v).trim()===""))return;
+      const name=getCell(row,ni),email=getCell(row,ei),contact=getCell(row,ci),team=getCell(row,ti),role=getCell(row,ri);
+      if(isEscalation){
+        if(name||role||team||email||contact){
+          parsedEscalations.push({
+            name:String(name??"").trim(),role:String(role??"").trim(),
+            team:String(team??"").trim(),email:String(email??"").trim(),
+            contact:String(contact??"").trim()
+          });
+        }
+        return;
+      }
+      const rawShift=String(getCell(row,si));
+      const base={name:String(name),email:String(email),contact:String(contact),team:String(team||sheetName),timezone:getTimezone(getCell(row,zi)),shift:rawShift,shiftKey:identifyShift(rawShift)};
+      if(!base.name&&!base.email&&!base.contact)return;
+      if(dateColumns.length){
+        dateColumns.forEach(({index,date})=>{const availability=String(getCell(row,index)).trim();if(availability)parsedResources.push({...base,date,availability});});
+      }else parsedResources.push({...base,date:"",availability:"Not specified"});
+    });
+  });
+  return {resources:parsedResources,escalations:parsedEscalations};
+}
+async function uploadExcel(){
+  if(!currentUser||currentUser.id!==ADMIN_USER_ID){alert("Administrator login required.");return;}
+  const file=document.getElementById("excelFile").files[0];
+  const message=document.getElementById("uploadMessage"),button=document.getElementById("uploadButton");
+  if(!file){message.textContent="Please select an Excel file.";message.className="error";return;}
+  button.disabled=true;message.textContent="Reading Excel workbook...";message.className="";
+  try{
+    const buffer=await file.arrayBuffer(),workbook=XLSX.read(buffer,{type:"array",cellDates:true});
+    const result=parseWorkbook(workbook);
+    if(!result.resources.length&&!result.escalations.length)throw new Error("No records found. Check your Excel headings and sheet names.");
+    const payload={resources:result.resources,escalations:result.escalations,fileName:file.name,updatedAt:new Date().toISOString()};
+    message.textContent="Publishing dashboard data...";
+    const {error}=await db.from("dashboard_snapshot").upsert({id:1,payload,updated_at:new Date().toISOString()});
+    if(error)throw error;
+    message.textContent=`Published successfully: ${result.resources.length} resource records and ${result.escalations.length} escalation contacts.`;
+    message.className="success";document.getElementById("excelFile").value="";await loadDashboard();
+  }catch(error){console.error(error);message.textContent="Upload failed: "+error.message;message.className="error";}
+  finally{button.disabled=false;}
+}
+
+/* SHARED DASHBOARD DATA */
+async function loadDashboard(){
+  const table=document.getElementById("resourceTable");
+  try{
+    const {data,error}=await db.from("dashboard_snapshot").select("payload,updated_at").eq("id",1).maybeSingle();
+    if(error)throw error;
+    if(!data){
+      resources=[];escalations=[];lastUpdatedValue=null;renderDashboard();
+      table.innerHTML='<tr><td colspan="8" class="muted">No published data yet. Please wait for the administrator to upload the Excel file.</td></tr>';
+      document.getElementById("dataStatus").textContent="Waiting for first upload";return;
+    }
+    resources=Array.isArray(data.payload?.resources)?data.payload.resources:[];
+    escalations=Array.isArray(data.payload?.escalations)?data.payload.escalations.map(e=>({name:String(e.name??e.Name??e["Contact Name"]??"").trim(),role:String(e.role??e.Role??"").trim(),team:String(e.team??e.Team??"").trim(),email:String(e.email??e.Email??"").trim(),contact:String(e.contact??e.Contact??e["Contact Number"]??"").trim()})):[];
+    /* Backward compatibility with previously uploaded snapshots. */
+    resources=resources.map(r=>({...r,shiftKey:r.shiftKey||identifyShift(r.shift)}));
+    lastUpdatedValue=data.updated_at||data.payload?.updatedAt||null;
+    renderDashboard();document.getElementById("dataStatus").textContent="Connected · Shared data is live";
+  }catch(error){
+    console.error(error);table.innerHTML=`<tr><td colspan="8" class="error">${escapeHTML(error.message)}</td></tr>`;
+    document.getElementById("dataStatus").textContent="Unable to load shared data";
+  }
+}
+
+/* FILTERS */
+function fillDropdown(id,values,defaultText){
+  const select=document.getElementById(id),current=select.value;
+  const unique=[...new Set(values.filter(v=>v!==null&&v!==undefined&&String(v).trim()!=="").map(v=>String(v)))].sort();
+  select.innerHTML="";const first=document.createElement("option");first.value="";first.textContent=defaultText;select.appendChild(first);
+  unique.forEach(value=>{const option=document.createElement("option");option.value=value;option.textContent=value;select.appendChild(option);});
+  select.value=unique.includes(current)?current:"";
+}
+function renderShiftDropdown(){
+  const timezone=document.getElementById("timezoneFilter").value||"IST";
+  const select=document.getElementById("shiftFilter"),current=select.value;
+  select.innerHTML='<option value="">All Shifts</option>';
+  SHIFT_DEFINITIONS.forEach(shift=>{
+    const option=document.createElement("option");option.value=shift.key;
+    option.textContent=`${shift.name} · ${convertShift(shift,timezone)}`;select.appendChild(option);
+  });
+  /* Include custom shift labels found in the workbook, without losing records. */
+  const custom=[...new Set(resources.filter(r=>!r.shiftKey&&r.shift).map(r=>r.shift))];
+  custom.forEach(value=>{const option=document.createElement("option");option.value="custom:"+value;option.textContent=value;select.appendChild(option);});
+  select.value=[...select.options].some(o=>o.value===current)?current:"";
+}
+function normaliseTeam(value){return String(value??"").trim().replace(/\s+/g," ").toLowerCase();}
+function onTeamChange(){renderDashboard();}
+function onTimezoneChange(){renderShiftDropdown();renderDashboard();}
+function clearFilters(){
+  ["searchFilter","teamFilter","dateFilter"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("timezoneFilter").value="IST";
+  document.getElementById("shiftFilter").value="";
+  renderShiftDropdown();renderDashboard();
+}
+
+function renderShiftGuide(){
+  const timezone=document.getElementById("timezoneFilter").value||"IST";
+  document.getElementById("shiftGuide").innerHTML=SHIFT_DEFINITIONS.map(s=>`
+    <div class="shift-card"><span>${s.name} · ${timezone}</span><strong>${convertShift(s,timezone)}</strong></div>
+  `).join("");
+}
+
+function renderDashboard(){
+  fillDropdown("teamFilter",[...resources.map(r=>r.team),...escalations.map(e=>e.team)],"All Teams");
+  renderShiftDropdown();
+  const search=document.getElementById("searchFilter").value.toLowerCase().trim();
+  const team=document.getElementById("teamFilter").value;
+  const date=document.getElementById("dateFilter").value;
+  const timezone=document.getElementById("timezoneFilter").value||"IST";
+  const selectedShift=document.getElementById("shiftFilter").value;
+  const filtered=resources.filter(r=>{
+    const searchText=[r.name,r.email,r.contact,r.team].join(" ").toLowerCase();
+    const matchesShift=!selectedShift||
+      (selectedShift.startsWith("custom:")?r.shift===selectedShift.slice(7):r.shiftKey===selectedShift);
+    return (!search||searchText.includes(search))&&(!team||normaliseTeam(r.team)===normaliseTeam(team))&&(!date||r.date===date)&&matchesShift;
+  });
+  document.getElementById("totalResources").textContent=resources.length;
+  document.getElementById("totalTeams").textContent=new Set(resources.map(r=>r.team).filter(Boolean)).size;
+  document.getElementById("totalEscalations").textContent=escalations.length;
+  document.getElementById("lastUpdated").textContent=lastUpdatedValue?new Date(lastUpdatedValue).toLocaleString():"Not available";
+  document.getElementById("resultCount").textContent=filtered.length+" resource records";
+
+  const resourceTable=document.getElementById("resourceTable");
+  if(!filtered.length)resourceTable.innerHTML='<tr><td colspan="8" class="muted">No matching resources found.</td></tr>';
+  else resourceTable.innerHTML=filtered.map(r=>{
+    const shownTimezone=timezone||r.timezone||"IST";
+    return `<tr><td><strong>${escapeHTML(r.name)}</strong></td><td>${escapeHTML(r.email)}</td><td>${escapeHTML(r.contact)}</td><td>${escapeHTML(r.team)}</td><td>${escapeHTML(r.date)}</td><td>${escapeHTML(r.timezone)}</td><td>${escapeHTML(displayShift(r.shift,shownTimezone))}</td><td><span class="status">${escapeHTML(r.availability)}</span></td></tr>`;
+  }).join("");
+
+  /* IMPORTANT: the same Team dropdown controls escalation contacts. */
+  const matchingEscalations=escalations.filter(e=>!team||normaliseTeam(e.team)===normaliseTeam(team));
+  document.getElementById("escalationScope").textContent=team?`Showing ${team} contacts`:"Showing all teams";
+  const escalationTable=document.getElementById("escalationTable");
+  if(!matchingEscalations.length)escalationTable.innerHTML='<tr><td colspan="5" class="muted">No escalation contacts found for the selected team.</td></tr>';
+  else escalationTable.innerHTML=matchingEscalations.map(e=>`<tr><td><strong>${escapeHTML(e.name||"Name not provided")}</strong></td><td>${escapeHTML(e.role||"—")}</td><td>${escapeHTML(e.team||"—")}</td><td>${escapeHTML(e.email||"—")}</td><td>${escapeHTML(e.contact||"—")}</td></tr>`).join("");
+
+  renderShiftGuide();
+}
+
+async function initialiseDashboard(){
+  await restoreSession();await loadDashboard();
+  if(refreshTimer)clearInterval(refreshTimer);
+  refreshTimer=setInterval(loadDashboard,30000);
+}
+initialiseDashboard();
+</script>
+</body>
+</html>
